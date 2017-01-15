@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,14 +39,27 @@ public class DetailActivity extends AppCompatActivity {
             ImageView imageViewPoster = (ImageView) findViewById(R.id.image_view_movie_detail_poster);
 
             Picasso.with(this).load(movie.getPosterUri()).into(imageViewPoster);
-
+            textViewTitle.setText(movie.getTitle());
+            textViewSynopsis.setText(movie.getSynopsis());
+            String score = movie.getVoteAverage() + getString(R.string.vote_average_maximum_score);
+            textViewRating.setText(score);
+            textViewReleaseDate.setText(movie.getReleaseDate());
         } else {
             Toast.makeText(this, getString(R.string.toast_movie_detail_error), Toast.LENGTH_SHORT).show();
         }
 
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public static Intent getIntent(Context context, Parcelable movie) {
         Intent intent = new Intent(context, DetailActivity.class);

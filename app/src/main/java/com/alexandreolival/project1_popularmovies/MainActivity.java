@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -123,11 +125,19 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onListItemClicked(Movie clickedMovieItem) {
+    public void onListItemClicked(Movie clickedMovieItem, View view) {
         Log.d(TAG, "Clicked movie with the following data: " + clickedMovieItem.toString());
         Log.d(TAG, "Starting DetailActivity");
 
-        startActivity(DetailActivity.getIntent(this, clickedMovieItem));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(this, view,
+                            getString(R.string.transition_movie_poster));
+            startActivity(DetailActivity.getIntent(this, clickedMovieItem), options.toBundle());
+        } else {
+            startActivity(DetailActivity.getIntent(this, clickedMovieItem));
+        }
     }
 
     @Override
