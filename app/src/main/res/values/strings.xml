@@ -8,4 +8,6 @@
     <string name="button_retry_loading_movies_text">Retry</string>
     <string name="text_view_no_internet_connection_text">You have no internet connection</string>
     <string name="detail_activity_label">Movie Detail</string>
+    <string name="toast_movie_detail_error">There was an error displaying the movie data</string>
+    <string name="toast_internet_connectivity_error">You still have no internet connectivity</string>
 </resources>

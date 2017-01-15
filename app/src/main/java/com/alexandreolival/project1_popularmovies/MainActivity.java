@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements
                           movieJson.getString("poster_path"),
                           movieJson.getString("title"),
                           movieJson.getString("release_date"),
-                          movieJson.getString("vote_count"),
+                          movieJson.getString("vote_average"),
                           movieJson.getString("overview")
                   )
                 );
@@ -262,7 +262,10 @@ public class MainActivity extends AppCompatActivity implements
                     mRecyclerView.setVisibility(View.VISIBLE);
                     loadMoviesSortedByPopularity();
                 } else {
-                    Toast.makeText(this, "You still have no internet connectivity",
+                    if (mProgressBarLoadingMovies.getVisibility() == View.VISIBLE) {
+                        mProgressBarLoadingMovies.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(this, getString(R.string.toast_internet_connectivity_error),
                             Toast.LENGTH_SHORT).show();
                 }
                 break;

@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alexandreolival.project1_popularmovies.model.Movie;
+import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final String MOVIE_OBJECT_EXTRA = "movie_object";
     private static final String TAG = "DetailActivity";
-
-    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +27,22 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Log.d(TAG, "Got movie from intent: " + getIntent().getParcelableExtra(MOVIE_OBJECT_EXTRA).toString());
+        if (getIntent().hasExtra(MOVIE_OBJECT_EXTRA)) {
+            Log.d(TAG, "Got movie from intent: " + getIntent().getParcelableExtra(MOVIE_OBJECT_EXTRA).toString());
+            Movie movie = getIntent().getParcelableExtra(MOVIE_OBJECT_EXTRA);
 
-        mTextView = (TextView) findViewById(R.id.text_view_movie_details);
-        mTextView.setText(getIntent().getParcelableExtra(MOVIE_OBJECT_EXTRA).toString());
+            TextView textViewTitle = (TextView) findViewById(R.id.text_view_movie_title);
+            TextView textViewSynopsis = (TextView) findViewById(R.id.text_view_movie_synopsis);
+            TextView textViewRating = (TextView) findViewById(R.id.text_view_movie_rating);
+            TextView textViewReleaseDate = (TextView) findViewById(R.id.text_view_movie_release_date);
+            ImageView imageViewPoster = (ImageView) findViewById(R.id.image_view_movie_detail_poster);
+
+            Picasso.with(this).load(movie.getPosterUri()).into(imageViewPoster);
+
+        } else {
+            Toast.makeText(this, getString(R.string.toast_movie_detail_error), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
