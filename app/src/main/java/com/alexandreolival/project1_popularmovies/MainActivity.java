@@ -1,6 +1,7 @@
 package com.alexandreolival.project1_popularmovies;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -63,7 +64,13 @@ public class MainActivity extends AppCompatActivity implements
         mButtonRetry = (Button) findViewById(R.id.button_retry_loading_movies);
         mButtonRetry.setOnClickListener(this);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            gridLayoutManager = new GridLayoutManager(this, 2);
+        } else {
+            gridLayoutManager = new GridLayoutManager(this, 4);
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_movies);
         mRecyclerView.setLayoutManager(gridLayoutManager);
@@ -76,9 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         if (checkInternetConnectivity()) {
             loadMoviesSortedByPopularity();
         } else {
-            mRecyclerView.setVisibility(View.GONE);
-            mTextViewNoInternetConnection.setVisibility(View.VISIBLE);
-            mButtonRetry.setVisibility(View.VISIBLE);
+            showNoInternetConnectionViews();
         }
     }
 
@@ -154,9 +159,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (checkInternetConnectivity()) {
                     loadMoviesSortedByPopularity();
                 } else {
-                    mRecyclerView.setVisibility(View.GONE);
-                    mTextViewNoInternetConnection.setVisibility(View.VISIBLE);
-                    mButtonRetry.setVisibility(View.VISIBLE);
+                    showNoInternetConnectionViews();
                 }
                 return true;
 
@@ -164,9 +167,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (checkInternetConnectivity()) {
                     loadMoviesSortedByRatings();
                 } else {
-                    mRecyclerView.setVisibility(View.GONE);
-                    mTextViewNoInternetConnection.setVisibility(View.VISIBLE);
-                    mButtonRetry.setVisibility(View.VISIBLE);
+                    showNoInternetConnectionViews();
                 }
                 return true;
 
@@ -249,6 +250,11 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         mMovieAdapter.setMovieList(movieArrayList);
+        if (movieArrayList.size() > 0) {
+            hideNoInternetConnectionViews();
+        } else {
+            showNoInternetConnectionViews();
+        }
     }
 
     @Override
@@ -267,9 +273,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (view.getId()) {
             case R.id.button_retry_loading_movies:
                 if (checkInternetConnectivity()) {
-                    mButtonRetry.setVisibility(View.GONE);
-                    mTextViewNoInternetConnection.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
+                    hideNoInternetConnectionViews();
                     loadMoviesSortedByPopularity();
                 } else {
                     if (mProgressBarLoadingMovies.getVisibility() == View.VISIBLE) {
@@ -281,4 +285,17 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
     }
+
+    private void hideNoInternetConnectionViews() {
+        mButtonRetry.setVisibility(View.GONE);
+        mTextViewNoInternetConnection.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoInternetConnectionViews() {
+        mRecyclerView.setVisibility(View.GONE);
+        mTextViewNoInternetConnection.setVisibility(View.VISIBLE);
+        mButtonRetry.setVisibility(View.VISIBLE);
+    }
+
 }
