@@ -19,9 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alexandreolival.project1_popularmovies.adapters.MovieAdapter;
@@ -42,14 +40,12 @@ public class MainActivity extends AppCompatActivity implements
         MovieAdapter.ListItemClickedListener, LoaderManager.LoaderCallbacks<String>, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
+    private static final String MOVIE_DB_QUERY_URL_EXTRA = "MOVIE_DB_QUERY_URL";
+    private static final int MOVIE_DB_LOADER_ID = 22;
 
     private MovieAdapter mMovieAdapter;
 
-    private static final int MOVIE_DB_LOADER_ID = 22;
-    private static final String MOVIE_DB_QUERY_URL_EXTRA = "MOVIE_DB_QUERY_URL";
-
-    private Button mButtonRetry;
-    private TextView mTextViewNoInternetConnection;
+    private View mNoConnectionView;
     private ProgressBar mProgressBarLoadingMovies;
     private RecyclerView mRecyclerView;
 
@@ -57,15 +53,22 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initViews();
+        // First load
+        if (checkInternetConnectivity()) {
+            showConnectedStateView(true);
+            loadMoviesSortedByPopularity();
+        } else {
+            showConnectedStateView(false);
+        }
+    }
 
+    private void initViews() {
         mProgressBarLoadingMovies = (ProgressBar) findViewById(R.id.progress_bar_loading_movies);
-
-        mTextViewNoInternetConnection = (TextView) findViewById(R.id.text_view_no_internet_connection);
-        mButtonRetry = (Button) findViewById(R.id.button_retry_loading_movies);
-        mButtonRetry.setOnClickListener(this);
+        mNoConnectionView = findViewById(R.id.no_connection_view);
+        findViewById(R.id.button_retry_loading_movies).setOnClickListener(this);
 
         GridLayoutManager gridLayoutManager;
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             gridLayoutManager = new GridLayoutManager(this, 2);
         } else {
@@ -78,13 +81,6 @@ public class MainActivity extends AppCompatActivity implements
 
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
-
-        // First load
-        if (checkInternetConnectivity()) {
-            loadMoviesSortedByPopularity();
-        } else {
-            showNoInternetConnectionViews();
-        }
     }
 
     private void loadMoviesSortedByPopularity() {
@@ -157,17 +153,19 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.sort_most_popular:
                 if (checkInternetConnectivity()) {
+                    showConnectedStateView(true);
                     loadMoviesSortedByPopularity();
                 } else {
-                    showNoInternetConnectionViews();
+                    showConnectedStateView(false);
                 }
                 return true;
 
             case R.id.sort_highest_rated:
                 if (checkInternetConnectivity()) {
+                    showConnectedStateView(true);
                     loadMoviesSortedByRatings();
                 } else {
-                    showNoInternetConnectionViews();
+                    showConnectedStateView(false);
                 }
                 return true;
 
@@ -250,10 +248,10 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         mMovieAdapter.setMovieList(movieArrayList);
-        if (movieArrayList.size() > 0) {
-            hideNoInternetConnectionViews();
+        if (!movieArrayList.isEmpty()) {
+            showConnectedStateView(true);
         } else {
-            showNoInternetConnectionViews();
+            showConnectedStateView(false);
         }
     }
 
@@ -273,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (view.getId()) {
             case R.id.button_retry_loading_movies:
                 if (checkInternetConnectivity()) {
-                    hideNoInternetConnectionViews();
+                    showConnectedStateView(true);
                     loadMoviesSortedByPopularity();
                 } else {
                     if (mProgressBarLoadingMovies.getVisibility() == View.VISIBLE) {
@@ -286,16 +284,8 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void hideNoInternetConnectionViews() {
-        mButtonRetry.setVisibility(View.GONE);
-        mTextViewNoInternetConnection.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+    private void showConnectedStateView(boolean isConnected) {
+        mRecyclerView.setVisibility(isConnected ? View.VISIBLE: View.GONE);
+        mNoConnectionView.setVisibility(isConnected ? View.GONE : View.VISIBLE);
     }
-
-    private void showNoInternetConnectionViews() {
-        mRecyclerView.setVisibility(View.GONE);
-        mTextViewNoInternetConnection.setVisibility(View.VISIBLE);
-        mButtonRetry.setVisibility(View.VISIBLE);
-    }
-
 }

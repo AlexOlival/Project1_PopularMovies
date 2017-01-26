@@ -10,6 +10,6 @@
     <string name="detail_activity_label">Movie Detail</string>
     <string name="toast_movie_detail_error">There was an error displaying the movie data</string>
     <string name="toast_internet_connectivity_error">You still have no internet connectivity</string>
-    <string name="vote_average_maximum_score">/10</string>
+    <string name="vote_average_maximum_score">%s/10</string>
     <string name="transition_movie_poster">poster</string>
 </resources>

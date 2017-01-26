@@ -2,8 +2,10 @@ package com.alexandreolival.project1_popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -41,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
             Picasso.with(this).load(movie.getPosterUri()).into(imageViewPoster);
             textViewTitle.setText(movie.getTitle());
             textViewSynopsis.setText(movie.getSynopsis());
-            String score = movie.getVoteAverage() + getString(R.string.vote_average_maximum_score);
+            String score = getString(R.string.vote_average_maximum_score, movie.getVoteAverage());
             textViewRating.setText(score);
             textViewReleaseDate.setText(movie.getReleaseDate());
         } else {
