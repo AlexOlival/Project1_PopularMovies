@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -11,32 +11,17 @@
         android:id="@+id/progress_bar_loading_movies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/text_view_no_internet_connection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_retry_loading_movies"
-        android:layout_centerInParent="true"
-        android:text="@string/text_view_no_internet_connection_text"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/button_retry_loading_movies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/button_retry_loading_movies_text"
-        android:visibility="gone"/>
-
+   <include layout="@layout/no_connection_view" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_movies"
         android:layout_width="match_parent"
+        android:layout_gravity="center"
         android:layout_height="match_parent"
         android:scrollbars="vertical"/>
 
-</RelativeLayout>
+</FrameLayout>

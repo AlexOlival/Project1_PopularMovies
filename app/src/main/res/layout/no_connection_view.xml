@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/no_connection_view"
+    android:visibility="gone"
+    android:layout_height="match_parent"
+    tools:context="com.alexandreolival.project1_popularmovies.MainActivity">
+
+    <TextView
+        android:id="@+id/text_view_no_internet_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/text_view_no_internet_connection_text"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/button_retry_loading_movies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/button_retry_loading_movies_text"
+        android:visibility="visible"/>
+
+</LinearLayout>
